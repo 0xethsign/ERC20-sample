@@ -6,17 +6,21 @@ import "ds-test/test.sol";
 import "./Erc20Sample.sol";
 
 contract Erc20SampleTest is DSTest {
-    Erc20Sample sample;
+    Erc20Sample token;
 
     function setUp() public {
-        sample = new Erc20Sample();
+        token = new Erc20Sample();
     }
 
-    function testFail_basic_sanity() public {
-        assertTrue(false);
+    function test_total_supply() public {
+        assertEq(token.totalSupply(), 100000000 ether);
+        assertEq(token.balanceOf(address(this)), token.totalSupply());
     }
 
-    function test_basic_sanity() public {
-        assertTrue(true);
+    function test_transfer() public {
+        uint256 amount = 1 ether;
+        token.transfer(address(0x1), amount);
+        assertEq(token.balanceOf(address(this)), token.totalSupply() - amount);
+        assertEq(token.balanceOf(address(0x1)), amount);
     }
 }
